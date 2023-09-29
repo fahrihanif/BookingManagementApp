@@ -31,18 +31,43 @@ public class BookingManagementDbContext : DbContext
         modelBuilder.Entity<University>()
                     .HasMany(e => e.Educations)
                     .WithOne(u => u.University)
-                    .HasForeignKey(e => e.UniversityGuid)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .HasForeignKey(e => e.UniversityGuid);
 
-        /*modelBuilder.Entity<Education>()
-                    .HasOne(u => u.University)
-                    .WithMany(e => e.Educations)
-                    .HasForeignKey(u => u.UniversityGuid);*/
-        
         // One Education has one Employee
         modelBuilder.Entity<Education>()
                     .HasOne(e => e.Employee)
                     .WithOne(e => e.Education)
                     .HasForeignKey<Education>(e => e.Guid);
+        
+        // One Employee has one Account
+        modelBuilder.Entity<Employee>()
+                    .HasOne(e => e.Account)
+                    .WithOne(e => e.Employee)
+                    .HasForeignKey<Account>(e => e.Guid)
+                    .OnDelete(DeleteBehavior.Cascade);
+        
+        // One Account has many AccountRoles
+        modelBuilder.Entity<Account>()
+                    .HasMany(a => a.AccountRoles)
+                    .WithOne(a => a.Account)
+                    .HasForeignKey(a => a.AccountGuid);
+        
+        // One Role has many AccountRoles
+        modelBuilder.Entity<Role>()
+                    .HasMany(r => r.AccountRoles)
+                    .WithOne(r => r.Role)
+                    .HasForeignKey(r => r.RoleGuid);
+        
+        // One Employee has many Bookings
+        modelBuilder.Entity<Employee>()
+                    .HasMany(e => e.Bookings)
+                    .WithOne(e => e.Employee)
+                    .HasForeignKey(e => e.EmployeeGuid);
+        
+        // One Room has many Bookings
+        modelBuilder.Entity<Room>()
+                    .HasMany(r => r.Bookings)
+                    .WithOne(r => r.Room)
+                    .HasForeignKey(r => r.RoomGuid);
     }
-}
+}   
