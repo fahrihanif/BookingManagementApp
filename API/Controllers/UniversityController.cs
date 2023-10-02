@@ -68,7 +68,10 @@ public class UniversityController : ControllerBase
             return NotFound("Id Not Found");
         }
         
-        var result = _universityRepository.Update(universityDto);
+        University toUpdate = universityDto;
+        toUpdate.CreatedDate = entity.CreatedDate;
+        
+        var result = _universityRepository.Update(toUpdate);
         if (!result)
         {
             return BadRequest("Failed to update data");
