@@ -6,19 +6,19 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UniversityController : ControllerBase
+public class EducationController : ControllerBase
 {
-    private readonly IUniversityRepository _universityRepository;
+    private readonly IEducationRepository _educationRepository;
     
-    public UniversityController(IUniversityRepository universityRepository)
+    public EducationController(IEducationRepository educationRepository)
     {
-        _universityRepository = universityRepository;
+        _educationRepository = educationRepository;
     }
-
+    
     [HttpGet]
     public IActionResult GetAll()
     {
-        var result = _universityRepository.GetAll();
+        var result = _educationRepository.GetAll();
         if (!result.Any())
         {
             return NotFound("Data Not Found");
@@ -30,7 +30,7 @@ public class UniversityController : ControllerBase
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var result = _universityRepository.GetByGuid(guid);
+        var result = _educationRepository.GetByGuid(guid);
         if (result is null)
         {
             return NotFound("Id Not Found");
@@ -39,9 +39,9 @@ public class UniversityController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(University university)
+    public IActionResult Create(Education education)
     {
-        var result = _universityRepository.Create(university);
+        var result = _educationRepository.Create(education);
         if (result is null)
         {
             return BadRequest("Failed to create data");
@@ -51,9 +51,9 @@ public class UniversityController : ControllerBase
     }
     
     [HttpPut]
-    public IActionResult Update(University university)
+    public IActionResult Update(Education education)
     {
-        var result = _universityRepository.Update(university);
+        var result = _educationRepository.Update(education);
         if (!result)
         {
             return BadRequest("Failed to update data");
@@ -65,13 +65,13 @@ public class UniversityController : ControllerBase
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {
-        var entity = _universityRepository.GetByGuid(guid);
+        var entity = _educationRepository.GetByGuid(guid);
         if (entity is null)
         {
             return NotFound("Id Not Found");
         }
         
-        var result = _universityRepository.Delete(entity);
+        var result = _educationRepository.Delete(entity);
         if (!result)
         {
             return BadRequest("Failed to delete data");
