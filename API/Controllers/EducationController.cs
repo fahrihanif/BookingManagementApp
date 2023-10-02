@@ -62,7 +62,7 @@ public class EducationController : ControllerBase
         return Ok("Data Updated");
     }
     
-    [HttpDelete]
+    [HttpDelete("{guid}")]
     public IActionResult Delete(Guid guid)
     {
         var entity = _educationRepository.GetByGuid(guid);

@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.DTOs.Universites;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,15 @@ public class UniversityController : ControllerBase
             return NotFound("Data Not Found");
         }
 
-        return Ok(result);
+        var data = result.Select(x => (UniversityDto) x);
+        
+        /*var universityDto = new List<UniversityDto>();
+        foreach (var university in result)
+        {
+            universityDto.Add((UniversityDto) university);
+        }*/
+        
+        return Ok(data);
     }
 
     [HttpGet("{guid}")]
@@ -35,25 +44,31 @@ public class UniversityController : ControllerBase
         {
             return NotFound("Id Not Found");
         }
-        return Ok(result);
+        return Ok((UniversityDto) result);
     }
 
     [HttpPost]
-    public IActionResult Create(University university)
+    public IActionResult Create(CreateUniversityDto universityDto)
     {
-        var result = _universityRepository.Create(university);
+        var result = _universityRepository.Create(universityDto);
         if (result is null)
         {
             return BadRequest("Failed to create data");
         }
-
-        return Ok(result);
+        
+        return Ok((UniversityDto) result);
     }
     
     [HttpPut]
-    public IActionResult Update(University university)
+    public IActionResult Update(UniversityDto universityDto)
     {
-        var result = _universityRepository.Update(university);
+        var entity = _universityRepository.GetByGuid(universityDto.Guid);
+        if (entity is null)
+        {
+            return NotFound("Id Not Found");
+        }
+        
+        var result = _universityRepository.Update(universityDto);
         if (!result)
         {
             return BadRequest("Failed to update data");
@@ -62,7 +77,7 @@ public class UniversityController : ControllerBase
         return Ok("Data Updated");
     }
     
-    [HttpDelete]
+    [HttpDelete("{guid}")]
     public IActionResult Delete(Guid guid)
     {
         var entity = _universityRepository.GetByGuid(guid);
