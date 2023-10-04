@@ -20,13 +20,11 @@ public class BookingManagementDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<Employee>().HasIndex(e => new {
-            e.Nik,
-            e.Email,
-            e.PhoneNumber
-        }).IsUnique();
         
+        modelBuilder.Entity<Employee>().HasIndex(e => e.Nik).IsUnique();
+        modelBuilder.Entity<Employee>().HasIndex(e => e.Email).IsUnique();
+        modelBuilder.Entity<Employee>().HasIndex(e => e.PhoneNumber).IsUnique();
+
         // One University has many Educations
         modelBuilder.Entity<University>()
                     .HasMany(e => e.Educations)
